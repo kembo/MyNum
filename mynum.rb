@@ -61,11 +61,19 @@ module MyNum
     end
 
     # @param [MyNum::NaturalNumber] other
-    # @return [MyNum::NaturalNumber] 合計
+    # @return [MyNum::NaturalNumber] 和
     def +(other)
       raise TypeError unless other.kind_of?(NaturalNumber)
       return self if other == @@Zero
       (self + other.pred).succ
+    end
+    # @param [MyNum::NaturalNumber] other
+    # @return [MyNum::NaturalNumber] 差
+    def -(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      return self if other == @@Zero
+      raise ArgumentError if self == @@Zero
+      self.pred - other.pred
     end
   end
 

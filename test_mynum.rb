@@ -64,4 +64,21 @@ class TestNaturalNumber < Test::Unit::TestCase
     arg1, arg2, result = data
     assert_equal(result, arg1 + arg2)
   end
+
+  data(  '1 - 0 = 1'   => [@@nums[1], @@nums[0], @@nums[1]],
+         '4 - 4 = 0'   => [@@nums[4], @@nums[4], @@nums[0]],
+       '102 - 2 = 100' => [@@nums[102], @@nums[2], @@nums[100]] )
+  def test_sub(data)
+    arg1, arg2, result = data
+    assert_equal(result, arg1 - arg2)
+  end
+
+  data(  '"0 - 1" is error' => [@@nums[0], @@nums[1]],
+         '"3 - 4" is error' => [@@nums[3], @@nums[4]],
+       '"2 - 100" is error' => [@@nums[2], @@nums[100]] )
+  def test_sub_error(data)
+    arg1, arg2 = data
+    assert_raise { arg1 - arg2 }
+  end
+
 end
