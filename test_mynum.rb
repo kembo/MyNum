@@ -15,8 +15,9 @@ class TestNaturalNumber < Test::Unit::TestCase
     assert_equal(@@Zero, @@Zero.succ.pred)
   end
 
-  @@Nums = (1..4).inject({0 => @@Zero}){|h, i| h[i] = h[i-1].succ; h }
-  @@Nums[100] = (5..100).inject(@@Nums[4]){|n, i| n.succ }
+  @@Nums = (1..5).inject({0 => @@Zero}){|h, i| h[i] = h[i-1].succ; h }
+  @@Nums[10] = (6..10).inject(@@Nums[5]){|n, i| n.succ }
+  @@Nums[100] = (11..100).inject(@@Nums[10]){|n, i| n.succ }
   @@Nums[101] = @@Nums[100].succ
   @@Nums[102] = @@Nums[101].succ
 
@@ -82,6 +83,15 @@ class TestNaturalNumber < Test::Unit::TestCase
     def test_sub_error(data)
       arg1, arg2 = data
       assert_raise { arg1 - arg2 }
+    end
+
+    data('1 * 0 = 0'  => [@@Nums[1], @@Nums[0], @@Nums[0]],
+         '0 * 4 = 0'  => [@@Nums[0], @@Nums[4], @@Nums[0]],
+         '2 * 5 = 10' => [@@Nums[2], @@Nums[5], @@Nums[10]],
+         '10 * 10 = 100' => [@@Nums[10], @@Nums[10], @@Nums[100]] )
+    def test_mul(data)
+      arg1, arg2, result = data
+      assert_equal(result, arg1 * arg2)
     end
   end
 

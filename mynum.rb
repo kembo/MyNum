@@ -75,6 +75,13 @@ module MyNum
       raise ArgumentError if self == @@Zero
       self.pred - other.pred
     end
+    # @param [MyNum::NaturalNumber] other
+    # @return [MyNum::NaturalNumber] 積
+    def *(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      return @@Zero if other == @@Zero
+      (self * other.pred) + self
+    end
   end
 
   # 整数のクラス
