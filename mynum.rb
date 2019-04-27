@@ -30,6 +30,37 @@ module MyNum
     end
 
     # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other より大きいかどうか
+    def >(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      return false if self == other or self == @@Zero
+      return true if other == @@Zero
+      self.pred > other.pred
+    end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other 以上かどうか
+    def >=(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      if self == other then true
+      else (self > other)
+      end
+    end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other より小さいかどうか
+    def <(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      other > self
+    end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other 以下かどうか
+    def <=(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      if self == other then true
+      else (other > self)
+      end
+    end
+
+    # @param [MyNum::NaturalNumber] other
     # @return [MyNum::NaturalNumber] 合計
     def +(other)
       raise TypeError unless other.kind_of?(NaturalNumber)
