@@ -11,25 +11,31 @@ module MyNum
 
   # 自然数
   class NaturalNumber < Numeric
-    # @!attribute [r] pred
-    #   @return [NaturalNumber, nil] その数の前者（0 の場合は nil）
-    attr_reader :pred
+    @@Zero = new
+    # @return [MyNum::NaturalNumber]
+    def self.Zero; @@Zero end
 
     # @private
     def initialize(pred: nil)
       @pred = pred
       @succ = nil
     end
-
-    # @return [NaturalNumber] その数の後者
+    # @!attribute [r] pred
+    #   @return [MyNum::NaturalNumber, nil] その数の前者（0 の場合は nil）
+    attr_reader :pred
+    # @return [MyNum::NaturalNumber] その数の後者
     def succ
       @succ = NaturalNumber._new(pred: self) if @succ.nil?
       @succ
     end
 
-    @@Zero = new
-    # @return [NaturalNumber]
-    def self.Zero; @@Zero end
+    # @param [MyNum::NaturalNumber] other
+    # @return [MyNum::NaturalNumber] 合計
+    def +(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      return self if other == @@Zero
+      (self + other.pred).succ
+    end
   end
 
   # 整数のクラス
