@@ -82,6 +82,25 @@ module MyNum
       return @@Zero if other == @@Zero
       (self * other.pred) + self
     end
+    # @param [MyNum::NaturalNumber] other
+    # @return [Array<MyNum::NaturalNumber>] 商と余りの配列
+    def divmod(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      raise ZeroDivisionError if other == @@Zero
+      quo = @@Zero
+      rem = self
+      until rem < other
+        quo  = quo.succ
+        rem -= other
+      end
+      [quo, rem]
+    end
+    # @param [MyNum::NaturalNumber] other
+    # @return [Array<MyNum::NaturalNumber>] 商
+    def /(other); divmod(other).first end
+    # @param [MyNum::NaturalNumber] other
+    # @return [Array<MyNum::NaturalNumber>] 余り
+    def %(other); divmod(other).last end
   end
 
   # 整数のクラス

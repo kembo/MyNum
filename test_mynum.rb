@@ -93,6 +93,23 @@ class TestNaturalNumber < Test::Unit::TestCase
       arg1, arg2, result = data
       assert_equal(result, arg1 * arg2)
     end
+
+    data(  '0 / 2 = 0' => [@@Nums[0], @@Nums[2], @@Nums[0]],
+          '10 / 3 = 3' => [@@Nums[10], @@Nums[3], @@Nums[3]],
+         '100 / 10 = 10' => [@@Nums[100], @@Nums[10], @@Nums[10]] )
+    def test_div(data)
+      arg1, arg2, result = data
+      assert_equal(result, arg1 / arg2)
+    end
+
+    data(  '0 % 2 = 0' => [@@Nums[0], @@Nums[2], @@Nums[0]],
+          '10 % 3 = 1' => [@@Nums[10], @@Nums[3], @@Nums[1]],
+         '100 % 4 = 0' => [@@Nums[100], @@Nums[4], @@Nums[0]],
+         '102 % 4 = 2' => [@@Nums[102], @@Nums[4], @@Nums[2]] )
+    def test_mod(data)
+      arg1, arg2, result = data
+      assert_equal(result, arg1 % arg2)
+    end
   end
 
 end
