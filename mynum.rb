@@ -3,7 +3,7 @@
 module MyNum
   # @abstract 数の基礎クラス
   class Numeric
-    private :new
+    private_class_method :new
   end
 
   # 自然数のクラス
