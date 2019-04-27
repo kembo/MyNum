@@ -3,10 +3,13 @@
 module MyNum
   # @abstract 数の基礎クラス
   class Numeric
-    private_class_method :new
+    class << self
+      alias_method :_new, :new
+      private :new
+    end
   end
 
-  # 自然数のクラス
+  # 自然数
   class NaturalNumber < Numeric
     # @!attribute [r] pred
     #   @return [NaturalNumber, nil] その数の前者（0 の場合は nil）
@@ -15,6 +18,13 @@ module MyNum
     # @private
     def initialize(pred: nil)
       @pred = pred
+      @succ = nil
+    end
+
+    # @return [NaturalNumber] その数の後者
+    def succ
+      @succ = NaturalNumber._new(pred: self) if @succ.nil?
+      @succ
     end
 
     @@Zero = new
