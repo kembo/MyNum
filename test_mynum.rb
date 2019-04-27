@@ -21,6 +21,15 @@ class TestNaturalNumber < Test::Unit::TestCase
   @@Nums[101] = @@Nums[100].succ
   @@Nums[102] = @@Nums[101].succ
 
+  data('0' => [@@Nums[0], '0'],
+       '2' => [@@Nums[2], '2'],
+       '10' => [@@Nums[10], '10'],
+       '100' => [@@Nums[100], '100'] )
+  def test_to_s(data)
+    num, str = data
+    assert_equal(str, num.to_s)
+  end
+
   sub_test_case('comparison') do
     data(  '1 is gather than 0'   => [@@Nums[1], @@Nums[0], true],
            '4 is gather than 2'   => [@@Nums[4], @@Nums[2], true],

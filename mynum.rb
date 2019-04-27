@@ -3,14 +3,15 @@
 module MyNum
   # @abstract 数の基礎クラス
   class Numeric
-    class << self
-      alias_method :_new, :new
-      private :new
-    end
+    private_class_method :new
   end
 
   # 自然数
   class NaturalNumber < Numeric
+    class << self
+      alias_method :_new, :new
+      public :_new
+    end
     @@Zero = new
     # @return [MyNum::NaturalNumber]
     def self.Zero; @@Zero end
@@ -27,6 +28,38 @@ module MyNum
     def succ
       @succ = NaturalNumber._new(pred: self) if @succ.nil?
       @succ
+    end
+
+    DECA = (1..10).inject(@@Zero){|n,_| n.succ }
+    # 文字列への変換
+    # @param [MyNum::NaturalNumber] base 基数
+    # @return [String] 数値の文字列表現
+    def to_s(base=DECA)
+      digits = [self]
+      until digits.first < base
+        n = digits.shift
+        digits = n.divmod(base) + digits
+      end
+      digits.map(&:to_char).join('')
+    end
+    # アンダーバーで囲った通常の Numeric と差別化した文字列を返す
+    # @return [String] 数値の文字列表現
+    def inspect; '_'+to_s+'_' end
+    # @private
+    # 一桁前提で文字への変換
+    # @raise [RangeError] 0-9, a-z で間に合わなかった場合
+    def to_char
+      return @char if instance_variable_defined?(:@char)
+      @char = case self
+        when @@Zero
+          '0'
+        when DECA
+          'a'
+        else
+          self.pred.to_char.succ
+        end
+      raise RangeError unless ('0'..'9').include?(@char) or ('a'..'z').include?(@char)
+      @char
     end
 
     # @param [MyNum::NaturalNumber] other
