@@ -160,12 +160,19 @@ module MyNum
     # @type [{Symbol=>{MyNum::NaturalNumber=>MyNum::Integer}}]
     @@instances = {pos: {}, neg: {}}
     class << self
-      # 整数のインスタンスを返す
-      # @param [MyNum::NaturalNumber] minuend 引かれる数
-      # @param [MyNum::NaturalNumber] subtrahend 引く数
-      # @return [MyNum::Integer]
-      def [](m, s)
-        unless m.kind_of?(NaturalNumber) and s.kind_of?(NaturalNumber)
+      # @overload [](minuend, subtrahend)
+      #   整数のインスタンスを返す
+      #   @param [MyNum::NaturalNumber] minuend 引かれる数
+      #   @param [MyNum::NaturalNumber] subtrahend 引く数
+      #   @return [MyNum::Integer]
+      # @overload [](value)
+      #   普通の Integer から MyNum::Integer に変換する
+      #   @param [::Integer] value
+      #   @return [MyNum::Integer]
+      def [](m, s=nil)
+        if s.nil?
+          raise TypeError.new("value: #{m.class}") unless m.kind_of?(::Integer)
+        elsif !(m.kind_of?(NaturalNumber) and s.kind_of?(NaturalNumber))
           raise TypeError.new("(m: #{m.class}, s: #{s.class})")
         end
         if s.pred.nil?
@@ -175,7 +182,15 @@ module MyNum
           @@instances[:neg][s] = new(m,s) unless @@instances[:neg].has_key?(s)
           return @@instances[:neg][s]
         end
-        self.[](m.pred, s.pred)
+        self[m.pred, s.pred]
+      end
+      # @private
+      def conv(val)
+        if val >= 0
+          self[ N[val], N.Zero ]
+        else
+          self[ N.Zero, N[val] ]
+        end
       end
     end
     # @private
