@@ -14,6 +14,16 @@ module MyNum
     class << self
       alias_method :_new, :new
       public :_new
+
+      # 普通の Integer から MyNum::NaturalNumber に変換する
+      # @param [::Integer] num 0以上の整数
+      # @return [MyNum::NaturalNumber] num と対応する自然数
+      # @raise [ArgumentError] 負の数が代入されたときの例外
+      def [](num)
+        raise TypeError.new("num(#{num.class})") unless num.kind_of?(::Integer)
+        raise ArgumentError.new('num is negative.') if num < 0
+        (0...num).inject(@@Zero){|n,_| n.succ }
+      end
     end
 
     # @private
@@ -33,7 +43,7 @@ module MyNum
     # @return [MyNum::NaturalNumber]
     def self.One; @@One end
 
-    DECA = (1..10).inject(@@Zero){|n,_| n.succ }
+    DECA = self[10]
     # 文字列への変換
     # @param [MyNum::NaturalNumber] base 基数
     # @return [String] 数値の文字列表現
@@ -180,6 +190,5 @@ module MyNum
     # @return [MyNum::Integer]
     def self.One; @@One end
   end
-
   Z = Integer
 end

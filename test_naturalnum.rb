@@ -15,6 +15,18 @@ class TestNaturalNumber < Test::Unit::TestCase
     assert_equal(@@Zero, @@Zero.succ.pred)
   end
 
+  data('0' => [0, @@Zero],
+       '1' => [1, @@Zero.succ] )
+  def test_convert(data)
+    int, nat = data
+    assert_equal(nat, MyNum::N[int])
+  end
+  data('negative num' => -1,
+       'float' => 2.5 )
+  def test_convert_error(data)
+    assert_raise { MyNum::N[data] }
+  end
+
   @@Nums = (1..5).inject({0 => @@Zero}){|h, i| h[i] = h[i-1].succ; h }
   @@Nums[10] = (6..10).inject(@@Nums[5]){|n, i| n.succ }
   @@Nums[100] = (11..100).inject(@@Nums[10]){|n, i| n.succ }
