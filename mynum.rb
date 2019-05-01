@@ -75,36 +75,28 @@ module MyNum
       @char
     end
 
+    # self と other を比較して、self が大きい時に 1、等しい時に 0、小さい時 に-1 を返す
+    # @param [MyNum::NaturalNumber] other
+    # @return [::Integer] -1 か 0 か 1
+    def <=>(other)
+      raise TypeError unless other.kind_of?(NaturalNumber)
+      return  0 if self.equal?(other)
+      return -1 if self.equal?(@@Zero)
+      return  1 if other.equal?(@@Zero)
+      self.pred <=> other.pred
+    end
     # @param [MyNum::NaturalNumber] other
     # @return [true, false] other より大きいかどうか
-    def >(other)
-      raise TypeError unless other.kind_of?(NaturalNumber)
-      return false if self == other or self == @@Zero
-      return true if other == @@Zero
-      self.pred > other.pred
-    end
-    # @param [MyNum::NaturalNumber] other
-    # @return [true, false] other 以上かどうか
-    def >=(other)
-      raise TypeError unless other.kind_of?(NaturalNumber)
-      if self == other then true
-      else (self > other)
-      end
-    end
+    def >(other); (self <=> other) == 1 end
     # @param [MyNum::NaturalNumber] other
     # @return [true, false] other より小さいかどうか
-    def <(other)
-      raise TypeError unless other.kind_of?(NaturalNumber)
-      other > self
-    end
+    def <(other); (self <=> other) == -1 end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other 以上かどうか
+    def >=(other); (self <=> other) != -1 end
     # @param [MyNum::NaturalNumber] other
     # @return [true, false] other 以下かどうか
-    def <=(other)
-      raise TypeError unless other.kind_of?(NaturalNumber)
-      if self == other then true
-      else (other > self)
-      end
-    end
+    def <=(other); (self <=> other) != 1 end
 
     # @param [MyNum::NaturalNumber] other
     # @return [MyNum::NaturalNumber] 和
