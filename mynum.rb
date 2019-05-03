@@ -164,6 +164,7 @@ module MyNum
       def [](m, s=nil)
         if s.nil?
           raise TypeError.new("value: #{m.class}") unless m.kind_of?(::Integer)
+          return conv(m)
         elsif !(m.kind_of?(NaturalNumber) and s.kind_of?(NaturalNumber))
           raise TypeError.new("(m: #{m.class}, s: #{s.class})")
         end
@@ -179,9 +180,9 @@ module MyNum
       # @private
       def conv(val)
         if val >= 0
-          self[ N[val], N.Zero ]
+          self[ N[val], N.Zero  ]
         else
-          self[ N.Zero, N[val] ]
+          self[ N.Zero, N[-val] ]
         end
       end
     end

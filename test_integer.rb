@@ -39,7 +39,7 @@ class TestInteger < Test::Unit::TestCase
     assert_equal(exp[0], act.minuend)
     assert_equal(exp[1], act.subtrahend)
   end
-  data('float' => [-3.4, ArgumentError])
+  data('float' => [-3.4, TypeError])
   def test_convert_error(data)
     act, err = data
     assert_raise(err){ MyNum::Integer[act] }
