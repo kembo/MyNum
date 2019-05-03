@@ -4,6 +4,18 @@ module MyNum
   # @abstract 数の基礎クラス
   class Numeric
     private_class_method :new
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other より大きいかどうか
+    def >(other); (self <=> other) == 1 end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other より小さいかどうか
+    def <(other); (self <=> other) == -1 end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other 以上かどうか
+    def >=(other); (self <=> other) != -1 end
+    # @param [MyNum::NaturalNumber] other
+    # @return [true, false] other 以下かどうか
+    def <=(other); (self <=> other) != 1 end
   end
 
   # 自然数
@@ -75,6 +87,16 @@ module MyNum
       @char
     end
 
+    # self が 0 であるかどうか
+    # @return [true, false]
+    def zero?; self.pred.nil? end
+    # self が 0 より大きいかどうか
+    # @return [true, false]
+    alias positive? zero?
+    # self が 0 より小さいかどうか
+    # @return [false] NaturalNumber は 0 より小さいことはない
+    def negative?; false end
+
     # self と other を比較して、self が大きい時に 1、等しい時に 0、小さい時 に-1 を返す
     # @param [MyNum::NaturalNumber] other
     # @return [::Integer] -1 か 0 か 1
@@ -85,18 +107,6 @@ module MyNum
       return  1 if other.equal?(@@Zero)
       self.pred <=> other.pred
     end
-    # @param [MyNum::NaturalNumber] other
-    # @return [true, false] other より大きいかどうか
-    def >(other); (self <=> other) == 1 end
-    # @param [MyNum::NaturalNumber] other
-    # @return [true, false] other より小さいかどうか
-    def <(other); (self <=> other) == -1 end
-    # @param [MyNum::NaturalNumber] other
-    # @return [true, false] other 以上かどうか
-    def >=(other); (self <=> other) != -1 end
-    # @param [MyNum::NaturalNumber] other
-    # @return [true, false] other 以下かどうか
-    def <=(other); (self <=> other) != 1 end
 
     # @param [MyNum::NaturalNumber] other
     # @return [MyNum::NaturalNumber] 和
@@ -197,6 +207,31 @@ module MyNum
     @@One  = self[N.One, N.Zero]
     # @return [MyNum::Integer]
     def self.One; @@One end
+
+    # self が 0 であるかどうか
+    # @return [true, false]
+    def zero?; @minuend.zero? and @subtrahend.zero? end
+    # self が 0 より大きいかどうか
+    # @return [true, false]
+    def positive?; (not @minuend.zero?) and @subtrahend.zero? end
+    # self が 0 より小さいかどうか
+    # @return [true, false]
+    def negative?; @minuend.zero? and (not @subtrahend.zero?) end
+
+    # self と other を比較して、self が大きい時に 1、等しい時に 0、小さい時 に-1 を返す
+    # @param [MyNum::Integer] other
+    # @return [::Integer] -1 か 0 か 1
+    def <=>(other)
+      raise TypeError unless other.kind_of?(Integer)
+      return 0 if self.equal?(other)
+      if self.zero?
+        other.positive? ? -1 : 1
+      elsif self.positive?
+        self.minuend <=> other.minuend
+      else
+        other.subtrahend <=> self.subtrahend
+      end
+    end
   end
   Z = Integer
 end

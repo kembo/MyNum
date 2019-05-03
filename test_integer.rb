@@ -44,4 +44,16 @@ class TestInteger < Test::Unit::TestCase
     act, err = data
     assert_raise(err){ MyNum::Integer[act] }
   end
+
+  data(
+    '1 is less than 3'      => [Z[1] , Z[3]  , -1],
+    '0 is less than 100'    => [Z[0] , Z[100], -1],
+    '-1 is gather than -3'  => [Z[-1], Z[-3] ,  1],
+    '0 is gather than -99'  => [Z[0] , Z[-99],  1],
+    '-2 equal -2'           => [Z[-2], Z[-2] ,  0]
+  )
+  def test_comparsion(data)
+    n1, n2, exp = data
+    assert_equal(exp, n1 <=> n2)
+  end
 end
